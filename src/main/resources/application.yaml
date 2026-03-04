@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: api-cursos
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    token:
+      secret: ${JWT_SECRET}
