@@ -65,47 +65,33 @@ public class CourseService {
         return CourseMapper.toCourseResponse(course);
     }
 
+
     public CourseResponse updateCourse(UUID id, CourseCreateRequest request){
-        Optional<CourseEntity>courseEntity = courseRepository.findById(id);
+        CourseEntity courseEntity = courseRepository.findById(id)
+                .orElseThrow(CourseNotFoundException::new);
 
-        if (courseEntity.isPresent()) {
-            CourseEntity course = courseEntity.get();
+        Optional.ofNullable(request.name())
+                .ifPresent(courseEntity::setName);
 
-            Optional.ofNullable(request.name())
-                    .ifPresent(course::setName);
+        Optional.ofNullable(request.category())
+                .ifPresent(courseEntity::setCategory);
 
-            Optional.ofNullable(request.category())
-                    .ifPresent(course::setCategory);
+        Optional.ofNullable(request.active())
+                .ifPresent(courseEntity::setActive);
 
-            Optional.ofNullable(request.active())
-                    .ifPresent(course::setActive);
-
-            return CourseMapper.toCourseResponse(courseRepository.save(course));
-        }
-
-        throw new CourseNotFoundException();
+        return CourseMapper.toCourseResponse(courseRepository.save(courseEntity));
     }
 
     public void updateActive(UUID id){
-        Optional<CourseEntity> course = courseRepository.findById(id);
+        CourseEntity course = courseRepository.findById(id)
+                .orElseThrow(CourseNotFoundException::new);
 
-        if (course.isPresent()) {
-            course.get().setActive(!course.get().isActive());
-            courseRepository.save(course.get());
-            return;
-        }
-
-        throw new CourseNotFoundException();
+        course.setActive(!course.isActive());
+        courseRepository.save(course);
     }
 
     public void delete(UUID id) {
-        Optional<CourseEntity> courseExists = courseRepository.findById(id);
-
-        if (courseExists.isPresent()) {
-            courseRepository.deleteById(id);
-            return;
-        }
-
-        throw new CourseNotFoundException();
+        courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
+        courseRepository.deleteById(id);
     }
 }
