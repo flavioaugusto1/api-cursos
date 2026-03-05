@@ -53,4 +53,15 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<Object> updateActive(@PathVariable UUID id) {
+        try{
+            courseService.updateActive(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Course updated");
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
 }

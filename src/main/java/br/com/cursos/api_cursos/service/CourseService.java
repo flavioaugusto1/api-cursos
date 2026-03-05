@@ -18,7 +18,7 @@ public class CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
-    
+
     public CourseResponse create(CourseCreateRequest request){
         CourseEntity course = CourseMapper.toCourseEntity(request);
         CourseEntity courseSaved = courseRepository.save(course);
@@ -58,6 +58,18 @@ public class CourseService {
 
 
         return CourseMapper.toListCourseEntity(courses);
+    }
+
+    public void updateActive(UUID id){
+        Optional<CourseEntity> course = courseRepository.findById(id);
+
+        if (course.isPresent()) {
+            course.get().setActive(!course.get().isActive());
+            courseRepository.save(course.get());
+            return;
+        }
+
+        throw new CourseNotFoundException();
     }
 
     public void delete(UUID id) {
