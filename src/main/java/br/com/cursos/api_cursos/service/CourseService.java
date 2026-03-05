@@ -60,8 +60,13 @@ public class CourseService {
         return CourseMapper.toListCourseEntity(courses);
     }
 
+    public CourseResponse getById(UUID id){
+        CourseEntity course = courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
+        return CourseMapper.toCourseResponse(course);
+    }
+
     public CourseResponse updateCourse(UUID id, CourseCreateRequest request){
-        Optional<CourseEntity> courseEntity = courseRepository.findById(id);
+        Optional<CourseEntity>courseEntity = courseRepository.findById(id);
 
         if (courseEntity.isPresent()) {
             CourseEntity course = courseEntity.get();

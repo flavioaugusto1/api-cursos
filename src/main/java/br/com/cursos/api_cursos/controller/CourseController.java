@@ -43,6 +43,17 @@ public class CourseController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getById(@PathVariable UUID id){
+        try{
+            CourseResponse courseResponse = courseService.getById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(courseResponse);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         try{
