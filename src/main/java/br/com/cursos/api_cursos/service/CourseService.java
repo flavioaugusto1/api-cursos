@@ -60,6 +60,27 @@ public class CourseService {
         return CourseMapper.toListCourseEntity(courses);
     }
 
+    public CourseResponse updateCourse(UUID id, CourseCreateRequest request){
+        Optional<CourseEntity> courseEntity = courseRepository.findById(id);
+
+        if (courseEntity.isPresent()) {
+            CourseEntity course = courseEntity.get();
+
+            Optional.ofNullable(request.name())
+                    .ifPresent(course::setName);
+
+            Optional.ofNullable(request.category())
+                    .ifPresent(course::setCategory);
+
+            Optional.ofNullable(request.active())
+                    .ifPresent(course::setActive);
+
+            return CourseMapper.toCourseResponse(courseRepository.save(course));
+        }
+
+        throw new CourseNotFoundException();
+    }
+
     public void updateActive(UUID id){
         Optional<CourseEntity> course = courseRepository.findById(id);
 
@@ -73,11 +94,7 @@ public class CourseService {
     }
 
     public void delete(UUID id) {
-
-        System.out.println(id);
-
         Optional<CourseEntity> courseExists = courseRepository.findById(id);
-
 
         if (courseExists.isPresent()) {
             courseRepository.deleteById(id);

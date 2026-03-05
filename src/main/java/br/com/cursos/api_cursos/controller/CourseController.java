@@ -64,4 +64,15 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> update(@PathVariable UUID id, @RequestBody CourseCreateRequest courseCreateRequest) {
+        try {
+            CourseResponse courseUpdated = courseService.updateCourse(id, courseCreateRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(courseUpdated);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
 }
