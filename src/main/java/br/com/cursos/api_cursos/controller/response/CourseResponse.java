@@ -10,6 +10,7 @@ public record CourseResponse(
         UUID id,
         String name,
         String category,
+        boolean active,
         LocalDateTime created_at,
         LocalDateTime updated_at
 ) {

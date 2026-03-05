@@ -27,6 +27,9 @@ public class CourseEntity {
     @Column(length = 50, nullable = false)
     public String category;
 
+    @Column(nullable = false)
+    public boolean active;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;

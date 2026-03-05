@@ -6,9 +6,9 @@ import br.com.cursos.api_cursos.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/course")
@@ -18,7 +18,7 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping("/new")
-    public ResponseEntity<Object> create(CourseCreateRequest courseCreateRequest) {
+    public ResponseEntity<Object> create(@RequestBody CourseCreateRequest courseCreateRequest) {
         try{
             CourseResponse courseResponse = courseService.create(courseCreateRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(courseResponse);
@@ -28,6 +28,18 @@ public class CourseController {
         }
     }
 
-
+    @GetMapping("/list")
+    public ResponseEntity<Object> getAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category
+    ) {
+        try{
+            List<CourseResponse> courses = courseService.getAll(name, category);
+            return ResponseEntity.status(HttpStatus.OK).body(courses);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
 
 }
