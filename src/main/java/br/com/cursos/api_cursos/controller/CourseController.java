@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/course")
@@ -42,4 +43,14 @@ public class CourseController {
         }
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Object> delete(@PathVariable UUID id) {
+        try{
+            courseService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Course deleted");
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 }
